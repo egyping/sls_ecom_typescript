@@ -15,9 +15,9 @@ const serverlessConfiguration: AWS = {
       ordersTable: '${sls:stage}-${self:service}-orders-table',
     },
     profile: {
-      dev: 'dev-profile',
-      int: 'int-profile',
-      prod: 'prod-profile',
+      dev: 'serverlessUser',
+      int: 'serverlessUser',
+      prod: 'serverlessUser',
     },
     
     esbuild: {
@@ -36,7 +36,7 @@ const serverlessConfiguration: AWS = {
     name: 'aws',
     runtime: 'nodejs16.x',
     profile: '${self:custom.profile.${sls:stage}}',
-    region: 'eu-central-1',
+    region: 'us-east-1',
     apiGateway: {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
