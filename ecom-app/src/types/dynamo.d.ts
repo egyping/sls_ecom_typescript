@@ -31,3 +31,19 @@ export interface ProductsRecord {
         displayValue: string
     } []
 }
+
+type Timestamp = number;
+export type OrderStatus = 'placed' | 'packed' | 'delivered' | 'error';
+
+export interface OrderRecord {
+  id: string;
+  pk: string;
+  sk: `order#${Timestamp}`;
+
+  userId: string;
+  userEmail: string;
+  dateCreated: Timestamp;
+  dateUpdated?: Timestamp;
+  status: OrderStatus;
+  items: { id: ProductId; count: number; size?: number }[];
+}

@@ -67,3 +67,32 @@ create new function at src and serverless
 sls deploy
 test
 https://5uf0knr5g9.execute-api.us-east-1.amazonaws.com/dev/product/7910750b-926c-4a5f-86c8-9cb32a92db4c
+
+
+
+<< 03_createOrder >>
+First create model (interface) for the order at the types then create the function which will form the order 
+at serverless>functions create record for the createOrder function 
+the variable authorizer represent cognito so any function has http (api gateway) and has authorizer variable 
+means it secured by cognito and cognito data is passing 
+authorizer connected to cognitoResources where the cloudformation of cognito is defined over there 
+serverless.ts > has resources section > the section has CognitoResources > which point to cognitoResources
+sls deploy
+https://5uf0knr5g9.execute-api.us-east-1.amazonaws.com/dev/orders
+post test
+its secured request need cognito token so how to create token?
+you can do it through aws cli 
+you can do it through https://getmycognitotoken.com
+its sign up procss and fully handle by frontend and cognito nothing to do with the serverless backend
+get the token and use bearer token 
+you need to pass the followings in the post body  "" items: { id: ProductId; count: number; size?: number }[]; ""
+raw - 
+{
+    "items": [
+        {
+        "id": "0ecc7acf-6bd6-479d-8645-0eb828901d98",
+        "count": 2,
+        "size": 60
+        }
+    ]
+}
