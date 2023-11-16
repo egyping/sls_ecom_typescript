@@ -99,3 +99,17 @@ raw -
 
 
 << 04_streamHandler >>
+now we can place orders 
+we want that whenever new order get placed anoth lambda function to be executed 
+this will happen through Dynamodb Streams enable trigger >> send to event bridge > EB trigger lambda function
+streamHandler: lambda will be executed\triggered by dynamodbstream when new order get placed 
+npm i - S @aws-sdk/client-eventbridge
+to install the unmarshall 
+npm i -S @aws-sdk/util-dynamodb 
+you will need to eventBrigeBusName to the environments and cusotm 
+this applied to the development D this needed for using iam roles attached to the stream function
+allow the function to put event to the event bus
+npm i -D serverless-iam-roles-per-function 
+and serverless-iam-roles-per-function to the plugins list
+by deploying you will get a new trigger at the order table in the console
+now create new order and check 

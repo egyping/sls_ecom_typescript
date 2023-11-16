@@ -64,6 +64,32 @@ const functions: AWS['functions'] = {
       },
     ],
   },
+
+  streamHandler: {
+    handler: 'src/functions/streamHandler/index.handler',
+    events: [
+      {
+        stream: {
+          type: 'dynamodb',
+          arn: {
+            // this mean that any time stream of the orderstable triggered it will execude this lambda
+            // npm i -D serverless-iam-roles-per-function and add it to the plugins 
+            'Fn::GetAtt': ['OrdersTable', 'StreamArn'],
+          },
+        },
+      },
+    ],
+    //@ts-expect-error
+    // statement to provide the function access to the event bridge 
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: ['events:PutEvents'],
+        Resource:
+          'arn:aws:events:${self:provider.region}:${aws:accountId}:event-bus/${self:custom.eventBrigeBusName}',
+      },
+    ],
+  },
   
 
   

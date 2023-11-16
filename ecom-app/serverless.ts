@@ -8,7 +8,7 @@ const serverlessConfiguration: AWS = {
   service: 'ecom-app',
   frameworkVersion: '3',
 
-  plugins: ['serverless-esbuild'],
+  plugins: ['serverless-esbuild', 'serverless-iam-roles-per-function'],
   custom: {
     tables: {
       productTable: '${sls:stage}-${self:service}-product-table',
@@ -19,7 +19,7 @@ const serverlessConfiguration: AWS = {
       int: 'serverlessUser',
       prod: 'serverlessUser',
     },
-    
+    eventBrigeBusName: 'ordersEventBus',
     esbuild: {
       bundle: true,
       minify: false,
@@ -46,6 +46,7 @@ const serverlessConfiguration: AWS = {
       productTable: '${self:custom.tables.productTable}',
       ordersTable: '${self:custom.tables.ordersTable}',
       region: '${self:provider.region}',
+      eventBrigeBusName: '${self:custom.eventBrigeBusName}',
     },
     iamRoleStatements: [
       {
