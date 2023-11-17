@@ -103,7 +103,7 @@ now we can place orders
 we want that whenever new order get placed anoth lambda function to be executed 
 this will happen through Dynamodb Streams enable trigger >> send to event bridge > EB trigger lambda function
 streamHandler: lambda will be executed\triggered by dynamodbstream when new order get placed 
-npm i - S @aws-sdk/client-eventbridge
+npm i -S @aws-sdk/client-eventbridge
 to install the unmarshall 
 npm i -S @aws-sdk/util-dynamodb 
 you will need to eventBrigeBusName to the environments and cusotm 
@@ -113,4 +113,12 @@ npm i -D serverless-iam-roles-per-function
 and serverless-iam-roles-per-function to the plugins list
 by deploying you will get a new trigger at the order table in the console
 now create new order and check 
-test
+
+>> new function ebOrderPlacedNotification this will email the user by new order placed 
+the function listen to the event bridge new order and trigger ses to send email.
+we will use the SES client so we need to create client at libs and install ses sdk
+npm i -S @aws-sdk/client-ses
+
+
+
+

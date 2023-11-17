@@ -79,14 +79,38 @@ const functions: AWS['functions'] = {
         },
       },
     ],
-    //@ts-expect-error
     // statement to provide the function access to the event bridge 
+    //@ts-expect-error
     iamRoleStatements: [
       {
         Effect: 'Allow',
         Action: ['events:PutEvents'],
         Resource:
           'arn:aws:events:${self:provider.region}:${aws:accountId}:event-bus/${self:custom.eventBrigeBusName}',
+      },
+    ],
+  },
+
+  ebOrderPlacedNotification: {
+    handler: 'src/functions/ebOrderPlacedNotification/index.handler',
+    events: [
+      {
+        eventBridge: {
+          eventBus: '${self:custom.eventBrigeBusName}',
+          pattern: {
+            source: ['order.placed'],
+          },
+        },
+      },
+    ],
+    // iamRoleStatementsInherit will add the role to the other roles in the serverless.ts because we need access to the products table
+    //@ts-expect-error
+    iamRoleStatementsInherit: true,
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: ['ses:sendEmail'],
+        Resource: '*',
       },
     ],
   },
