@@ -197,3 +197,12 @@ need to update the serverless\functions and secrets
 similar to OrderPackedNotification and make your own orderDeliveredNotification
 now test 
 POST - https://5uf0knr5g9.execute-api.us-east-1.amazonaws.com/dev/orderdelivered/{orderId}
+
+
+<< .env file contains >>
+warehouseApiKey=7910750b-926c-4a5f-86c8-9cb32a92db4c
+orderpackeApiKeys={"warehouse1":"7910750b-926c-4a5f-86c8-9cb32a92db4c","warehouse2":"7910750b-926c-4a5f-86c8-9cb32a92db4c"}
+deliveryApiKey=7910750b-926c-4a5f-86c8-9cb32a92db4c
+orderdeliveredApiKeys={"dhl":"7910750b-926c-4a5f-86c8-9cb32a92db4c"}
+
+sls remove
