@@ -13,6 +13,7 @@ const corsSettings = {
   allowCredentials: false,
 };
 
+
 interface Authorizer {
   name: string;
   type: string;
@@ -24,6 +25,12 @@ const authorizer: Authorizer = {
   name: 'authorizer',
   type: 'COGNITO_USER_POOLS',
   arn: { 'Fn::GetAtt': ['CognitoUserPool', 'Arn'] },
+};
+
+const iamGetSecret = {
+  Effect: 'Allow',
+  Action: ['secretsmanager:GetSecretValue'],
+  Resource: '*',
 };
 
 const functions: AWS['functions'] = {
@@ -115,7 +122,101 @@ const functions: AWS['functions'] = {
     ],
   },
   
+  ebOrderPlacedPicklist: {
+    handler: 'src/functions/ebOrderPlacedPicklist/index.handler',
+    events: [
+      {
+        eventBridge: {
+          eventBus: '${self:custom.eventBrigeBusName}',
+          pattern: {
+            source: ['order.placed'],
+          },
+        },
+      },
+    ],
+    //@ts-expect-error
+    iamRoleStatements: [iamGetSecret],
+  },
 
+  packingComplete: {
+    handler: 'src/functions/packingComplete/index.handler',
+    events: [
+      {
+        http: {
+          method: 'post',
+          path: 'orderpacked/{orderId}',
+          cors: corsSettings,
+        },
+      },
+    ],
+    // will access dynamo so we need iamRoleStatementsInherit to be true and we need secret manager access too
+    //@ts-expect-error
+    iamRoleStatementsInherit: true,
+    iamRoleStatements: [iamGetSecret],
+  },
+
+
+  ebOrderPackedNotification: {
+    handler: 'src/functions/ebOrderPackedNotification/index.handler',
+    events: [
+      {
+        eventBridge: {
+          eventBus: '${self:custom.eventBrigeBusName}',
+          pattern: {
+            source: ['order.packed'],
+          },
+        },
+      },
+    ],
+    //@ts-expect-error
+    iamRoleStatementsInherit: true,
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: ['ses:sendEmail'],
+        Resource: '*',
+      },
+    ],
+  },
+
+  deliveryComplete: {
+    handler: 'src/functions/deliveryComplete/index.handler',
+    events: [
+      {
+        http: {
+          method: 'post',
+          path: 'orderdelivered/{orderId}',
+          cors: corsSettings,
+        },
+      },
+    ],
+    //@ts-expect-error
+    iamRoleStatementsInherit: true,
+    iamRoleStatements: [iamGetSecret],
+  },
+
+  ebOrderDeliveredNotification: {
+    handler: 'src/functions/ebOrderDeliveredNotification/index.handler',
+    events: [
+      {
+        eventBridge: {
+          eventBus: '${self:custom.eventBrigeBusName}',
+          pattern: {
+            source: ['order.delivered'],
+          },
+        },
+      },
+    ],
+    //@ts-expect-error
+    iamRoleStatementsInherit: true,
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: ['ses:sendEmail'],
+        Resource: '*',
+      },
+    ],
+  }
   
 };
 

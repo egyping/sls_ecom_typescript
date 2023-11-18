@@ -3,11 +3,12 @@ import type { AWS } from '@serverless/typescript';
 import functions from './serverless/functions';
 import DynamoResources from './serverless/dynamodb';
 import CognitoResources from './serverless/cognitoResources';
+import SecretsConfig from './serverless/secrets';
 
 const serverlessConfiguration: AWS = {
   service: 'ecom-app',
   frameworkVersion: '3',
-
+  useDotenv: true,
   plugins: ['serverless-esbuild', 'serverless-iam-roles-per-function'],
   custom: {
     tables: {
@@ -68,6 +69,7 @@ const serverlessConfiguration: AWS = {
       ...DynamoResources,
       //...AssetsBucketAndCloudfront,
       ...CognitoResources,
+      ...SecretsConfig,
     },
     Outputs: {
       OrdersDynamoTableName: {

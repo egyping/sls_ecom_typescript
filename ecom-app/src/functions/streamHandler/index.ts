@@ -11,6 +11,7 @@ import {
   import { AttributeValue } from '@aws-sdk/client-dynamodb';
 
 const client = new EventBridgeClient({});
+// get the event bridge bus name from env ordersEventBus mentioned in the serverless
 const eventBrigeBusName = process.env.eventBrigeBusName;
 
 // This handler will be triggered by dunamodb stream event not api gateway
